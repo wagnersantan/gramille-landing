@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Landing — Andréa Silva, Advocacia Previdenciária
+   Landing — Gramille Soares, Advocacia
    ========================================================================== */
 
 :root {
@@ -692,3 +692,67 @@ ol, ul { padding: 0; list-style: none; }
   .wa-float { animation: none; }
   * { transition-duration: .01ms !important; }
 }
+
+/* ==========================================================================
+   Gramille Soares — acréscimos ao modelo
+   ========================================================================== */
+
+/* Cards de área: ícone + lista de temas */
+.area-card__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  background: var(--sand-soft);
+  color: var(--gold);
+}
+.area-card__list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+  font-size: 14.5px;
+  line-height: 1.5;
+  color: var(--ink-70);
+}
+.area-card__list li { position: relative; padding-left: 18px; }
+.area-card__list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: .62em;
+  width: 8px;
+  height: 1.5px;
+  background: var(--gold);
+}
+
+/* Foto do hero (placeholder até chegar a foto definitiva) */
+.photo-slot--hero {
+  aspect-ratio: 4 / 5;
+  border-radius: 220px 220px 24px 24px;
+  padding: 40px;
+  line-height: 1.5;
+}
+
+/* Bloco do Instagram */
+.instagram__card {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px 32px;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 28px;
+  padding: clamp(28px, 4vw, 48px);
+}
+.instagram__card > div { max-width: 600px; min-width: 0; }
+.instagram__text { font-size: 17px; line-height: 1.6; color: var(--ink-60); margin-top: 12px; }
+.btn--outline.btn--lg { padding: 17px 28px; font-size: 16px; font-weight: 700; }
+
+/* Textos longos nunca estouram a coluna */
+.area-card, .credential, .step, .footer-links a { min-width: 0; overflow-wrap: anywhere; }

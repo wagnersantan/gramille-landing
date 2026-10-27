@@ -1,20 +1,21 @@
-/* Landing — Andréa Silva
-   Duas coisas apenas: revelar seções no scroll e rodar o simulador. */
+/* Landing — Gramille Soares
+   Duas coisas apenas: revelar seções no scroll e montar o resumo do caso. */
 
 (function () {
   'use strict';
 
   /* --- WhatsApp ----------------------------------------------------------- */
 
-  var PHONE = document.body.dataset.whatsapp || '';
+  var root = document.querySelector('[data-whatsapp]');
+  var PHONE = (root && root.dataset.whatsapp) || '';
   var DEFAULT_MSG =
-    'Olá, Andréa! Vim pelo site e gostaria de uma análise do meu caso.';
+    'Olá, Gramille! Vim pelo site e gostaria de conversar sobre o meu caso.';
 
   function waLink(message) {
     return 'https://wa.me/' + PHONE + '?text=' + encodeURIComponent(message);
   }
 
-  // Mantém todos os links de contato em sincronia com data-whatsapp no <body>.
+  // Mantém todos os links de contato em sincronia com data-whatsapp.
   document.querySelectorAll('a[data-wa]').forEach(function (a) {
     a.href = waLink(DEFAULT_MSG);
   });
@@ -40,50 +41,58 @@
     targets.forEach(function (el) { io.observe(el); });
   }
 
-  /* --- Simulador ---------------------------------------------------------- */
+  /* --- Organize seu caso -------------------------------------------------- */
+  /* Não avalia direito nem promete resultado: só organiza as respostas e monta
+     a mensagem que vai para o WhatsApp. */
 
   var QUESTIONS = [
     {
       label: 'Pergunta 1 de 3',
-      q: 'Qual dessas situações é a sua?',
+      q: 'Sobre o que é o seu caso?',
       options: [
-        { k: 'maternidade',   label: 'Sou mãe e quero o salário-maternidade' },
-        { k: 'bpc',           label: 'Tenho deficiência ou sou idosa(o) de baixa renda (BPC/LOAS)' },
-        { k: 'doenca',        label: 'Estou sem conseguir trabalhar por problema de saúde' },
-        { k: 'aposentadoria', label: 'Quero me aposentar ou revisar minha aposentadoria' }
+        { k: 'imobiliario',   label: 'Imóvel: compra, venda, aluguel, contrato ou regularização' },
+        { k: 'consumidor',    label: 'Consumo: cobrança, banco, plano de saúde, produto ou serviço' },
+        { k: 'previdenciario', label: 'INSS: aposentadoria, auxílio, BPC ou outro benefício' },
+        { k: 'outro',         label: 'Outro assunto ou ainda não sei' }
       ]
     },
     {
       label: 'Pergunta 2 de 3',
-      q: 'Você já pediu esse benefício no INSS?',
+      q: 'Em que ponto você está?',
       options: [
-        { k: 'negado',  label: 'Pedi e foi negado' },
-        { k: 'analise', label: 'Pedi e está em análise há muito tempo' },
-        { k: 'nunca',   label: 'Nunca pedi' }
+        { k: 'inicio',   label: 'Ainda não tomei nenhuma providência' },
+        { k: 'tentei',   label: 'Já tentei resolver direto com a outra parte, a empresa ou o INSS' },
+        { k: 'cobranca', label: 'Já recebi notificação, negativa, cobrança ou processo' }
       ]
     },
     {
       label: 'Pergunta 3 de 3',
-      q: 'Você tem os documentos em mãos?',
+      q: 'Você tem documentos do caso em mãos?',
       options: [
-        { k: 'sim',   label: 'Sim, tenho carta, laudos e/ou CNIS' },
-        { k: 'parte', label: 'Tenho parte deles' },
-        { k: 'nao',   label: 'Não sei quais documentos preciso' }
+        { k: 'sim',   label: 'Sim, tenho contrato, protocolo, laudo ou comprovantes' },
+        { k: 'parte', label: 'Tenho só uma parte deles' },
+        { k: 'nao',   label: 'Ainda não sei quais documentos reunir' }
       ]
     }
   ];
 
   var TITLES = {
-    maternidade:   'Muito provavelmente sim — e talvez sem nunca ter contribuído.',
-    bpc:           'Seu perfil tem forte chance de BPC/LOAS.',
-    doenca:        'Há um caminho claro para auxílio por incapacidade.',
-    aposentadoria: 'Vale a pena revisar seu tempo de contribuição.'
+    imobiliario:    'Seu caso envolve Direito Imobiliário.',
+    consumidor:     'Seu caso envolve Direito do Consumidor.',
+    previdenciario: 'Seu caso envolve Direito Previdenciário.',
+    outro:          'Vamos entender o seu caso com calma.'
   };
 
   var TEXTS = {
-    negado:  'Benefício negado não é fim: a maior parte dos casos que chegam aqui foi indeferida antes e reverteu na via judicial. Me envie a carta de indeferimento.',
-    analise: 'Análise parada além do prazo legal pode ser destravada judicialmente. Me envie o número do protocolo.',
-    nunca:   'Ótimo — dá para montar o pedido do jeito certo desde o começo e evitar o indeferimento por documentação.'
+    inicio:   'Como você ainda não tomou nenhuma providência, é um bom momento para conversar antes de assinar, pagar ou responder qualquer coisa.',
+    tentei:   'Guarde os protocolos, e-mails e conversas da sua tentativa de resolver direto. Eles ajudam a entender o que já foi feito.',
+    cobranca: 'Se há prazo correndo, vale conversar o quanto antes. Envie a notificação, a negativa ou a cobrança que você recebeu.'
+  };
+
+  var DOCS = {
+    sim:   ' Você já tem documentos, e isso ajuda a conversa a começar mais adiantada.',
+    parte: ' Envie o que tiver em mãos; o que faltar, eu te oriento a reunir.',
+    nao:   ' Sem problema quanto aos documentos: na conversa eu explico o que reunir.'
   };
 
   var quiz        = document.getElementById('quiz');
@@ -112,9 +121,9 @@
 
   function caseMessage() {
     return (
-      'Olá, Andréa! Fiz o simulador do site. Situação: ' +
+      'Olá, Gramille! Preenchi o resumo do site. Assunto: ' +
       labelFor(0, answers[0]) +
-      '. No INSS: ' + labelFor(1, answers[1]) +
+      '. Situação: ' + labelFor(1, answers[1]) +
       '. Documentos: ' + labelFor(2, answers[2]) + '.'
     );
   }
@@ -133,15 +142,9 @@
     result.hidden = !done;
 
     if (done) {
-      elTitle.textContent = TITLES[answers[0]] || 'Seu caso merece uma análise.';
-
-      var text = TEXTS[answers[1]] || '';
-      if (answers[2] === 'nao') {
-        text += ' Não se preocupe com os documentos: eu te mando a lista exata do que buscar.';
-      }
-      elText.textContent =
-        text.trim() || 'Me envie os detalhes e eu analiso sem custo.';
-
+      elTitle.textContent = TITLES[answers[0]] || 'Vamos entender o seu caso com calma.';
+      elText.textContent = ((TEXTS[answers[1]] || '') + (DOCS[answers[2]] || '')).trim() ||
+        'Me envie os detalhes e eu explico os próximos passos.';
       linkResult.href = waLink(caseMessage());
       return;
     }

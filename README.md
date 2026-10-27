@@ -1,62 +1,56 @@
-# Gramille — Direito Previdenciário
+# Gramille Soares — Advocacia
 
-Landing page estática, sem build e sem dependências. Importada do projeto
-Claude Design *"Landing page para advogada Andrea Silva"*
-(`Landing Andrea Silva.dc.html`).
+Landing page estática, sem build e sem dependências. Adaptada do modelo
+"Andréa Silva — Direito Previdenciário" (mesma estrutura de arquivos).
 
 ```
 index.html    marcação e conteúdo
 styles.css    design tokens + layout
-main.js       revelação no scroll + simulador "Tenho direito?"
-assets/       fotos
+main.js       revelação no scroll + resumo "Organize seu caso"
+assets/       fotos (ainda não há)
 ```
 
 ## Rodar
-
-Qualquer servidor estático:
 
 ```sh
 python3 -m http.server 8000   # http://localhost:8000
 ```
 
-## O que precisa ser preenchido antes de publicar
+## O que ainda precisa ser preenchido antes de publicar
 
-A página ainda está com um placeholder de texto simples:
+- **Número da OAB/BA.** Foi retirado da página por enquanto. O Provimento
+  nº 205/2021 pede nome e número de inscrição na publicidade, então inclua
+  antes de divulgar: no hero (`hero__partner`), no selo da foto (`hero__badge`),
+  no cartão "Sobre" (`credential`), no rodapé (`footer-brand__role`) e no
+  texto legal.
+- E-mail e endereço do escritório (opcionais; não constam na página).
 
-| Onde | Placeholder |
-| --- | --- |
-| Rodapé | e-mail |
+WhatsApp atual: `557391985191` (aparece em `data-whatsapp` no `<body>` e nos
+`href` estáticos; para trocar, find-and-replace). Confira se o link abre a
+conversa certa: o número foi copiado do WhatsApp com 8 dígitos depois do DDD.
 
-## WhatsApp
+Fotos: há dois blocos tracejados (topo e "Sobre"). Para colocar as fotos, crie a
+pasta `assets/`, adicione `gramille-hero.jpg` e `gramille-sobre.jpg` e troque
+cada bloco por `<img class="hero__photo" src="assets/gramille-hero.jpg" alt="...">`
+e `<img class="sobre__photo photo-slot--portrait" src="assets/gramille-sobre.jpg" alt="...">`.
 
-O número (5573988278344) aparece em `data-whatsapp` no `<body>` — fonte da
-verdade, usada pelo JS para montar os links com a mensagem pré-preenchida —
-e nos `href="https://wa.me/…"` estáticos, que servem de fallback caso o JS
-não carregue. Para trocar o número, atualize os dois com um
-find-and-replace de `5573988278344`.
+## Conformidade com a publicidade da advocacia (OAB)
 
-## Fotos que faltam
+O modelo original tinha frases que advogados inscritos não podem usar. Nesta
+versão foram removidas ou reescritas:
 
-Três slots ficaram como placeholder tracejado, iguais aos `<image-slot>` do
-design. Para preencher, troque a `<div class="photo-slot">` por uma `<img>`:
+- "análise sem custo", "não paga nada adiantado", "é grátis" (oferta de serviço
+  gratuito e captação de clientela);
+- "+900 benefícios conquistados" e promessas de resultado;
+- "prioridade de atendimento no mesmo dia";
+- simulador que dizia "muito provavelmente sim" ou "forte chance". Agora ele só
+  organiza as respostas e monta a mensagem para o WhatsApp.
 
-- **Instagram** — posts 2, 3 e 4 (proporção 4:5)
+O rodapé cita o Provimento nº 205/2021 do CFOAB. Vale a Gramille conferir o
+texto final com a OAB/BA ou com a comissão de ética antes de publicar.
 
-## Simulador
+## Instagram
 
-Três perguntas em `main.js` (`QUESTIONS`), com títulos por área (`TITLES`) e
-textos por situação no INSS (`TEXTS`). O resultado monta um link `wa.me` com as
-três respostas na mensagem, para a conversa já começar com o caso descrito.
-
-## Notas de implementação
-
-- O template do design usava o runtime do Claude Design (`x-dc`, `sc-for`,
-  `sc-if`, `support.js`). Aqui as listas — áreas de atuação e passos — são HTML
-  estático, então aparecem para buscadores e sem JavaScript.
-- Sem JS a página inteira continua legível: as animações de entrada ficam
-  desligadas, os links de WhatsApp funcionam, e o simulador exibe um `noscript`
-  apontando para o WhatsApp.
-- No mobile (< 760px) os links de navegação do header saem, mantendo marca e
-  CTA — o header do design quebrava em três linhas e comia metade da tela.
-  As seções seguem acessíveis pelo scroll e pelo rodapé.
-- `prefers-reduced-motion` desliga revelação, pulso do botão e scroll suave.
+O bloco do Instagram aponta para `@gramillesoares.adv`. Quando houver mais
+posts, dá para voltar à grade de artes do modelo (ver `.photo-slot` e `.ig-tile`
+em `styles.css`).
